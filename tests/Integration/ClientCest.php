@@ -512,6 +512,8 @@ class ClientCest
 			->setSecret($_ENV['API_SECRET'])
 			->setUrl($_ENV['API_URL'])
 			->createClient();
+
+		var_dump($_ENV['API_URL']);
 		return $client;
 	}
 }
