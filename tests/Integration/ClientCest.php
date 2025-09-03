@@ -39,6 +39,11 @@ use Tests\Support\IntegrationTester;
 
 class ClientCest
 {
+	public function helloTest(IntegrationTester $I)
+	{
+		$I->assertNotEmpty("Hello");
+	}
+	
 	#[Group('methods')]
 	public function getMethodsTest(IntegrationTester $I)
 	{
