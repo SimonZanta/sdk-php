@@ -38,7 +38,7 @@ jobs:
         id: "extcache"
         uses: "shivammathur/cache-extensions@v1"
         with:
-          php-version: "${{ matrix.php-version }}"
+          php-version: "7.3"
           extensions: "${{ env.extensions }}"
           key: "${{ env.cache-version }}"
 
@@ -52,7 +52,7 @@ jobs:
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
         with:
-          php-version: "${{ matrix.php-version }}"
+          php-version: "7.3"
           extensions: "${{ env.extensions }}"
           tools: "composer:${{ env.composer-version }}"
           coverage: "${{ env.coverage }}"
