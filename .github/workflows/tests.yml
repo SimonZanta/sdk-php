@@ -13,7 +13,7 @@ jobs:
   tests:
     name: "Tests"
     runs-on: "${{ matrix.operating-system }}"
-    environment: github
+    environment: production
     strategy:
       matrix:
         php-version: ["7.3"]
