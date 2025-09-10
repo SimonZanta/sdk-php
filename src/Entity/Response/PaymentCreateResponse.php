@@ -9,7 +9,6 @@ use Comgate\SDK\Http\Query;
 
 class PaymentCreateResponse
 {
-
 	protected int $code;
 
 	protected string $message = '';
