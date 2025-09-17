@@ -9,7 +9,10 @@ use Comgate\SDK\Http\Response;
 
 class AppleDomainAssociationResponse
 {
-	protected string $fileContent;
+	/**
+	 * @var string
+	 */
+	protected $fileContent;
 	/**
 	 * @param Response $appleDomainAssociationResponse
 	 * @throws ApiException
