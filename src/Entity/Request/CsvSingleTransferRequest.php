@@ -13,6 +13,10 @@ class CsvSingleTransferRequest implements IRequest
 	 * @var bool
 	 */
 	protected $test;
+	/**
+	 * @var bool
+	 */
+	private $download = false; // just for method sync Cest to pass, should be always false
 
 	public function __construct(string $transferId, bool $test)
 	{
@@ -35,7 +39,7 @@ class CsvSingleTransferRequest implements IRequest
 	{
 		return [
 			'transferId' => $this->getTransferId(),
-			'download' => 'false',
+			'download' => $this->download,
 			'test' => $this->isTest() ? 'true' : 'false',
 		];
 	}
