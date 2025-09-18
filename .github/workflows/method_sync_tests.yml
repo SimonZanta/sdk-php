@@ -14,8 +14,7 @@ env:
   coverage: "xdebug"
 
 jobs:
-  tests:
-    if: github.ref == 'refs/heads/master'
+  method_sync_test:
     name: "Tests"
     runs-on: "${{ matrix.operating-system }}"
     environment: ${{ github.ref == 'refs/heads/master' && '' || 'github' }}
