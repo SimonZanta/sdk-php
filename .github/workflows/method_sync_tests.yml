@@ -1,5 +1,8 @@
 name: "tests"
 on:
+  pull_request:
+    branches: [ '**' ]
+    types: [ opened, synchronize, reopened, ready_for_review ]
   schedule:
     - cron: "0 4 * * *" # kvuli tomu ze GH funguje na UTC, tak se test spousi ve 4 (nas cas 6:00)
   workflow_dispatch:
@@ -16,6 +19,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     name: "Tests"
     runs-on: "${{ matrix.operating-system }}"
+    environment: ${{ github.ref == 'refs/heads/master' && '' || 'github' }}
     strategy:
       matrix:
         php-version: ["8.0"]
