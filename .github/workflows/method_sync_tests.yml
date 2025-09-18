@@ -14,8 +14,8 @@ env:
   coverage: "xdebug"
 
 jobs:
-  method_sync_test:
-    name: "Tests"
+  tests:
+    name: "Method_sync_test"
     runs-on: "${{ matrix.operating-system }}"
     environment: ${{ github.ref == 'refs/heads/master' && '' || 'github' }}
     strategy:
