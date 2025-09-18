@@ -17,7 +17,7 @@ jobs:
   tests:
     name: "Method_sync_test"
     runs-on: "${{ matrix.operating-system }}"
-    environment: ${{ github.ref == 'refs/heads/master' && '' || 'github' }}
+    environment: ${{ github.ref == 'refs/heads/master' && '' || '' }}
     strategy:
       matrix:
         php-version: ["8.0"]
