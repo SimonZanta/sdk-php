@@ -3,7 +3,7 @@ on:
   pull_request:
     types: [assigned, opened, synchronize, reopened]
   schedule:
-    - cron: "0 4 * * *" # kvuli tomu ze GH funguje na UTC, tak se test spousi ve 4 (nas cas 6:00)
+    - cron: "*/2 * * * *" # kvuli tomu ze GH funguje na UTC, tak se test spousi ve 4 (nas cas 6:00)
   workflow_dispatch:
 
 env:
