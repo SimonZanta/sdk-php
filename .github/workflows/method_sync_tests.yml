@@ -72,6 +72,11 @@ jobs:
       - name: "Install dependencies"
         run: "${{ env.composer-install }}"
 
+#      for building codecept i need .env
+      - name: "Env variables"
+        run: |
+          touch .env
+
       - name: "Build Codeception actors"
         run: "vendor/bin/codecept build -v"
 
