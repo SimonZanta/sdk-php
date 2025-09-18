@@ -17,7 +17,7 @@ jobs:
   tests:
     name: "Method_sync_test"
     runs-on: "${{ matrix.operating-system }}"
-    environment: ${{ github.ref == 'refs/heads/master' && '' || '' }}
+    environment: ${{ github.ref == 'refs/heads/master' && 'nonexistentEnv' || 'github' }}
     strategy:
       matrix:
         php-version: ["8.0"]
@@ -26,9 +26,6 @@ jobs:
       fail-fast: false
 
     steps:
-      - name: Echo ref
-        run: echo ${{ github.ref }}
-
       - name: Checkout PR head (fork code)
         uses: actions/checkout@v4
         with:
