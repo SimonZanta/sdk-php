@@ -26,6 +26,9 @@ jobs:
       fail-fast: false
 
     steps:
+      - name: Echo ref
+        run: echo ${{ github.ref }}
+
       - name: Checkout PR head (fork code)
         uses: actions/checkout@v4
         with:
