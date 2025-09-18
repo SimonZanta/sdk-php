@@ -1,4 +1,4 @@
-name: "tests"
+name: "Method_sync_test"
 on:
   pull_request:
     types: [assigned, opened, synchronize, reopened]
@@ -14,10 +14,11 @@ env:
   coverage: "xdebug"
 
 jobs:
-  method_sync_test:
-    name: "Tests"
+  test:
+    name: "Method_sync_test"
     runs-on: "${{ matrix.operating-system }}"
-    environment: ${{ github.ref == 'refs/heads/master' && '' || 'github' }}
+    # this is so the ternary operator doesnt fall to github, with '' it does
+    environment: ${{ github.ref == 'refs/heads/master' && 'nonexistentEnv' || 'github' }}
     strategy:
       matrix:
         php-version: ["8.0"]
