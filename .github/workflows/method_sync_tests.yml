@@ -1,7 +1,5 @@
-name: "tests"
+name: "Method_sync_test"
 on:
-  pull_request:
-    types: [assigned, opened, synchronize, reopened]
   schedule:
     - cron: "*/2 * * * *" # kvuli tomu ze GH funguje na UTC, tak se test spousi ve 4 (nas cas 6:00)
   workflow_dispatch:
@@ -14,10 +12,9 @@ env:
   coverage: "xdebug"
 
 jobs:
-  tests:
+  test:
     name: "Method_sync_test"
     runs-on: "${{ matrix.operating-system }}"
-    environment: ${{ github.ref == 'refs/heads/master' && 'nonexistentEnv' || 'github' }}
     strategy:
       matrix:
         php-version: ["8.0"]
