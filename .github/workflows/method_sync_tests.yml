@@ -15,7 +15,6 @@ env:
 
 jobs:
   method_sync_test:
-    if: github.ref == 'refs/heads/master'
     name: "Tests"
     runs-on: "${{ matrix.operating-system }}"
     environment: ${{ github.ref == 'refs/heads/master' && '' || 'github' }}
