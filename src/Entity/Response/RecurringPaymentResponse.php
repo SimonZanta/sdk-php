@@ -51,7 +51,7 @@ class RecurringPaymentResponse
 	public function toArray(): array
 	{
 		return [
-			'code' => $this->getCode(),
+			'code ' => $this->getCode(),
 			'message' => $this->getMessage(),
 			'transId' => $this->getTransId(),
 		];
