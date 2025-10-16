@@ -202,7 +202,7 @@ $data = $framework->getHttpRequest()->getPostData();
 // Use PaymentNotification only for getting transactionId
 // For other details about payment please use $client->getStatus with appropriate getter
 $notification = PaymentNotification::createFrom($data);
-$transactionId = $notification->getTransactionId();
+$transactionId = $notification->getEmail();
 
 try {
     // it's important to check the status from API
