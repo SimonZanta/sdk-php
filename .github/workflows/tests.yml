@@ -95,7 +95,16 @@ jobs:
 
       - name: Run Codeception Tests
         run: |
-          vendor/bin/codecept run -v
+          vendor/bin/codecept run -v --coverage --coverage-xml coverage.xml --coverage-html coverage-html
+
+      - name: Upload coverage report
+        if: ${{ success() || failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            tests/_output/coverage.xml
+            tests/_output/coverage-html/
 
       - name: IP check on Failure
         if: ${{ failure() }}
