@@ -1,0 +1,106 @@
+name: "coverage-badge"
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  extensions: "json, xdebug"
+  cache-version: "1"
+  composer-version: "v2"
+  composer-install: "composer install --no-interaction --no-progress --prefer-dist"
+  coverage: "xdebug"
+
+jobs:
+  coverage:
+    name: "Coverage Badge"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Setup PHP cache environment"
+        id: "extcache"
+        uses: "shivammathur/cache-extensions@v1"
+        with:
+          php-version: "8.5"
+          extensions: "${{ env.extensions }}"
+          key: "${{ env.cache-version }}"
+
+      - name: "Cache PHP extensions"
+        uses: "actions/cache@v4"
+        with:
+          path: "${{ steps.extcache.outputs.dir }}"
+          key: "${{ steps.extcache.outputs.key }}"
+          restore-keys: "${{ steps.extcache.outputs.key }}"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "8.5"
+          extensions: "${{ env.extensions }}"
+          tools: "composer:${{ env.composer-version }}"
+          coverage: "${{ env.coverage }}"
+        env:
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Get Composer cache directory"
+        id: "composercache"
+        run: 'echo "::set-output name=dir::$(composer config cache-files-dir)"'
+
+      - name: "Cache PHP dependencies"
+        uses: "actions/cache@v4"
+        with:
+          path: "${{ steps.composercache.outputs.dir }}"
+          key: "${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}"
+          restore-keys: "${{ runner.os }}-composer-"
+
+      - name: "Install dependencies"
+        run: "${{ env.composer-install }}"
+
+      - name: "Env variables"
+        run: |
+          echo "API_MERCHANT=${{ secrets.API_MERCHANT }}" >> .env
+          echo "API_SECRET=${{ secrets.API_SECRET }}" >> .env
+          echo "API_URL=${{ secrets.API_URL }}" >> .env
+          echo "API_URL_REST=${{ secrets.API_URL_REST }}" >> .env
+          echo "APPLICATION_ENV='sdk-github'" >> .env
+          echo "CF_ACCESS_CLIENT_ID=${{ secrets.CF_ACCESS_CLIENT_ID }}" >> .env
+          echo "CF_ACCESS_CLIENT_SECRET=${{ secrets.CF_ACCESS_CLIENT_SECRET }}" >> .env
+
+      - name: "Build Codeception actors"
+        run: "vendor/bin/codecept build -v"
+
+      - name: "Regenerate autoloader"
+        run: "composer dump-autoload --optimize"
+
+      - name: "Run tests with coverage"
+        run: |
+          vendor/bin/codecept run --coverage --coverage-xml coverage.xml
+
+      - name: "Extract coverage percentage"
+        id: "coverage"
+        run: |
+          COVERAGE=$(php -r "
+            \$xml = simplexml_load_file('tests/_output/coverage.xml');
+            \$metrics = \$xml->project->metrics;
+            \$statements = (int)\$metrics['statements'];
+            \$covered = (int)\$metrics['coveredstatements'];
+            echo \$statements > 0 ? round(\$covered / \$statements * 100) : 0;
+          ")
+          echo "percentage=${COVERAGE}" >> $GITHUB_OUTPUT
+          echo "Coverage: ${COVERAGE}%"
+
+      - name: "Update coverage badge (Gist)"
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ${{ secrets.COVERAGE_GIST_ID }}
+          filename: coverage.json
+          label: coverage
+          message: "${{ steps.coverage.outputs.percentage }}%"
+          valColorRange: ${{ steps.coverage.outputs.percentage }}
+          maxColorRange: 100
+          minColorRange: 0

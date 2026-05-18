@@ -6,6 +6,7 @@
 
 <p align=center>
   <a href="https://github.com/comgate-payments/sdk-php/actions"><img src="https://badgen.net/github/checks/comgate-payments/sdk-php"></a>
+  <a href="https://github.com/comgate-payments/sdk-php/actions/workflows/coverage-badge.yml"><img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/{GH_USER}/{GIST_ID}/raw/coverage.json&label=coverage"></a>
   <a href="https://packagist.org/packages/comgate/sdk"><img src="https://badgen.net/packagist/dm/comgate/sdk"></a>
   <a href="https://packagist.org/packages/comgate/sdk"><img src="https://badgen.net/packagist/v/comgate/sdk"></a>
   <a href="https://packagist.org/packages/comgate/sdk"><img src="https://badgen.net/packagist/php/comgate/sdk"></a>
