@@ -94,6 +94,8 @@ jobs:
         run: "composer dump-autoload --optimize"
 
       - name: Run Codeception Tests
+        env:
+          XDEBUG_MODE: coverage
         run: |
           vendor/bin/codecept run -v --coverage --coverage-xml coverage.xml --coverage-html coverage-html
 
