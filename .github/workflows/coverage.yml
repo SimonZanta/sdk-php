@@ -1,13 +1,9 @@
-name: "coverage-badge"
+name: "coverage"
 
 on:
   push:
     branches:
       - master
-
-permissions:
-  pages: write
-  id-token: write
 
 env:
   extensions: "json, xdebug"
@@ -18,7 +14,7 @@ env:
 
 jobs:
   coverage:
-    name: "Coverage Badge"
+    name: "Coverage"
     runs-on: "ubuntu-latest"
 
     steps:
@@ -84,46 +80,10 @@ jobs:
         env:
           XDEBUG_MODE: coverage
         run: |
-          vendor/bin/codecept run --coverage --coverage-xml coverage.xml --coverage-html
+          vendor/bin/codecept run --coverage --coverage-xml coverage.xml
 
-      - name: "Extract coverage percentage"
-        id: "coverage"
-        run: |
-          COVERAGE=$(php -r "
-            \$xml = simplexml_load_file('tests/_output/coverage.xml');
-            \$metrics = \$xml->project->metrics;
-            \$statements = (int)\$metrics['statements'];
-            \$covered = (int)\$metrics['coveredstatements'];
-            echo \$statements > 0 ? round(\$covered / \$statements * 100) : 0;
-          ")
-          echo "percentage=${COVERAGE}" >> $GITHUB_OUTPUT
-          echo "Coverage: ${COVERAGE}%"
-
-      - name: "Update coverage badge (Gist)"
-        uses: schneegans/dynamic-badges-action@v1.7.0
+      - name: "Upload coverage to Coveralls"
+        uses: coverallsapp/github-action@v2
         with:
-          auth: ${{ secrets.GIST_TOKEN }}
-          gistID: ${{ secrets.COVERAGE_GIST_ID }}
-          filename: coverage.json
-          label: coverage
-          message: "${{ steps.coverage.outputs.percentage }}%"
-          valColorRange: ${{ steps.coverage.outputs.percentage }}
-          maxColorRange: 100
-          minColorRange: 0
-
-      - name: "Upload Pages artifact"
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: tests/_output/coverage/
-
-  deploy:
-    name: "Deploy to GitHub Pages"
-    needs: coverage
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: "Deploy to GitHub Pages"
-        uses: actions/deploy-pages@v4
-        id: deployment
+          file: tests/_output/coverage.xml
+          format: clover
