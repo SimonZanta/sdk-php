@@ -97,7 +97,7 @@ jobs:
         env:
           XDEBUG_MODE: coverage
         run: |
-          vendor/bin/codecept run -v --coverage --coverage-xml coverage.xml --coverage-html coverage-html
+          vendor/bin/codecept run -v --coverage --coverage-xml coverage.xml --coverage-html
 
       - name: Upload coverage report
         if: ${{ success() || failure() }}
@@ -106,7 +106,7 @@ jobs:
           name: coverage-report
           path: |
             tests/_output/coverage.xml
-            tests/_output/coverage-html/
+            tests/_output/coverage/
 
       - name: IP check on Failure
         if: ${{ failure() }}
