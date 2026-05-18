@@ -5,6 +5,10 @@ on:
     branches:
       - master
 
+permissions:
+  pages: write
+  id-token: write
+
 env:
   extensions: "json, xdebug"
   cache-version: "1"
@@ -80,7 +84,7 @@ jobs:
         env:
           XDEBUG_MODE: coverage
         run: |
-          vendor/bin/codecept run --coverage --coverage-xml coverage.xml
+          vendor/bin/codecept run --coverage --coverage-xml coverage.xml --coverage-html
 
       - name: "Extract coverage percentage"
         id: "coverage"
@@ -106,3 +110,20 @@ jobs:
           valColorRange: ${{ steps.coverage.outputs.percentage }}
           maxColorRange: 100
           minColorRange: 0
+
+      - name: "Upload Pages artifact"
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: tests/_output/coverage/
+
+  deploy:
+    name: "Deploy to GitHub Pages"
+    needs: coverage
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: "Deploy to GitHub Pages"
+        uses: actions/deploy-pages@v4
+        id: deployment
